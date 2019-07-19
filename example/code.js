@@ -1,13 +1,4 @@
-var Lab = '';
+const a = <div>123 {123}{} <Div c="654"/></div>
 
-var a = (
-  <div id="#main" name="box">
-    hello world!
-    <a href="/login">go</a>
-    <a href="/logout">close</a>
-    <Lab>My Lab</Lab>
-    <this>this class</this>
-    <this.main.classname to="/value" />
-    {true && 'tips'}
-  </div>
-);
+const b = <div.c b={(123)}/>
+const c = <Div c="654" {...props} d="123" {...abc}/>

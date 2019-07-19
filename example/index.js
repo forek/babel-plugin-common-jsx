@@ -1,4 +1,4 @@
-var babel = require('babel-core');
+var babel = require('@babel/core');
 var codePath = require('path').join(__dirname, 'code.js');
 var jsxGenerator = require('../index.js');
 
