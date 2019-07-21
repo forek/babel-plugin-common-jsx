@@ -11,8 +11,9 @@ const buildTools = (t, fn) => ({
     if (t.isJSXMemberExpression(name)) {
       name = this.memberExpression(name)
     } else {
-      name = titleCaseRgx.test(name.name) ? this.identifier(name) : this.stringLiteral(name)
+      name = titleCaseRgx.test(name.name) || name.name === 'this' ? this.identifier(name) : this.stringLiteral(name)
     }
+
     return {
       tag: name,
       props: this.jsxProps(node.attributes)
@@ -27,7 +28,7 @@ const buildTools = (t, fn) => ({
         this.identifier(node.property)
       )
     }
-    throw new Error(`memberExpression - ${node}`)
+    throw new Error(`memberExpression - ${JSON.stringify(node)}`)
   },
   jsxProps (attr = []) {
     const hasJSXSpreadAttribute = !!attr.find(node => t.isJSXSpreadAttribute(node))
@@ -45,11 +46,11 @@ const buildTools = (t, fn) => ({
       const value = node.value ? (t.isStringLiteral(node.value) ? node.value : node.value.expression) : t.booleanLiteral(true)
       return t.objectProperty(key, value)
     }
-    throw new Error(`objectProperty - ${node}`)
+    throw new Error(`objectProperty - ${JSON.stringify(node)}`)
   },
   identifier (node) {
     if (t.isJSXIdentifier(node)) return t.identifier(node.name)
-    throw new Error(`identifier - ${node}`)
+    throw new Error(`identifier - ${JSON.stringify(node)}`)
   },
   stringLiteral (node) {
     if (t.isJSXIdentifier(node)) return t.stringLiteral(node.name)
@@ -68,8 +69,9 @@ const buildTools = (t, fn) => ({
         arr.push(node.expression)
       } else if (t.isJSXElement(node)) {
         arr.push(this.callExporession(node))
+      } else {
+        throw new Error(`jsxChildren - ${JSON.stringify(node)}`)
       }
-      throw new Error(`jsxChildren - ${node}`)
     }
     return t.arrayExpression(arr)
   }
