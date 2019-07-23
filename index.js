@@ -54,7 +54,7 @@ const buildTools = (t, fn) => ({
   },
   stringLiteral (node) {
     if (t.isJSXIdentifier(node)) return t.stringLiteral(node.name)
-    if (t.isJSXText(node)) return t.stringLiteral(node.value)
+    if (t.isJSXText(node)) return t.stringLiteral(node.value.trim())
     throw new Error(`stringLiteral - ${JSON.stringify(node)}`)
   },
   jsxChildren (children) {
