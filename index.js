@@ -1,18 +1,30 @@
 const titleCaseRgx = /^[A-Z]/
 
-const buildTools = (t, { functionName, fragmentName }) => ({
-  callExporession (node) {
+const buildTools = (t, { functionName, fragmentName, tagMode }) => ({
+  callExporession (path) {
+    const { node } = path
     const children = this.jsxChildren(node.children)
     if (t.isJSXFragment(node)) return t.callExpression(t.identifier(fragmentName), [children])
-    const opEl = this.jsxOpeningElementInfo(node.openingElement)
+    const opEl = this.jsxOpeningElementInfo(node.openingElement, path)
     return t.callExpression(t.identifier(functionName), [opEl.tag, opEl.props, children])
   },
-  jsxOpeningElementInfo (node) {
+  jsxOpeningElementInfo (node, path) {
     let { name } = node
     if (t.isJSXMemberExpression(name)) {
       name = this.memberExpression(name)
     } else {
-      name = titleCaseRgx.test(name.name) || name.name === 'this' ? this.identifier(name) : this.stringLiteral(name)
+      let needIdentifier = null
+
+      if (name.name === 'this') {
+        needIdentifier = true
+      } else {
+        switch (tagMode) {
+          case 'normal': needIdentifier = titleCaseRgx.test(name.name); break
+          case 'scope': needIdentifier = path.scope.hasOwnBinding(name.name, true /* noGlobals */); break
+        }
+      }
+
+      name = needIdentifier ? this.identifier(name) : this.stringLiteral(name)
     }
 
     return {
@@ -47,7 +59,7 @@ const buildTools = (t, { functionName, fragmentName }) => ({
       let value = t.booleanLiteral(true)
       if (node.value) {
         if (t.isStringLiteral(node.value)) value = node.value
-        else if (t.isJSXElement(node.value) || t.isJSXFragment(node.value)) value = this.callExporession(node.value)
+        else if (t.isJSXElement(node.value) || t.isJSXFragment(node.value)) value = node.value
         else value = node.value.expression
       }
       return t.objectProperty(key, value)
@@ -74,7 +86,7 @@ const buildTools = (t, { functionName, fragmentName }) => ({
         if (t.isJSXEmptyExpression(node.expression)) continue
         arr.push(node.expression)
       } else if (t.isJSXElement(node) || t.isJSXFragment(node)) {
-        arr.push(this.callExporession(node))
+        arr.push(node)
       } else {
         throw new Error(`jsxChildren - ${JSON.stringify(node)}`)
       }
@@ -85,7 +97,8 @@ const buildTools = (t, { functionName, fragmentName }) => ({
 
 const defaultOptions = {
   functionName: 'createElement',
-  fragmentName: 'createFragment'
+  fragmentName: 'createFragment',
+  tagMode: 'normal' // or scope
 }
 
 module.exports = function (options = {}) {
@@ -95,10 +108,10 @@ module.exports = function (options = {}) {
       inherits: require('babel-plugin-syntax-jsx'),
       visitor: {
         JSXElement (path) {
-          path.replaceWith(build.callExporession(path.node))
+          path.replaceWith(build.callExporession(path))
         },
         JSXFragment (path) {
-          path.replaceWith(build.callExporession(path.node))
+          path.replaceWith(build.callExporession(path))
         }
       }
     }
