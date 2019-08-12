@@ -1,6 +1,6 @@
 {
   "name": "jsx-generator",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Build your own jsx-transformer!",
   "main": "index.js",
   "scripts": {
