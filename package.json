@@ -1,12 +1,13 @@
 {
-  "name": "jsx-generator",
-  "version": "0.1.0",
+  "name": "babel-plugin-common-jsx",
+  "version": "0.1.1",
   "description": "Build your own jsx-transformer!",
   "main": "index.js",
   "scripts": {
     "example": "node ./example/index.js"
   },
   "keywords": [
+    "babel-plugin",
     "jsx",
     "transformer"
   ],

@@ -1,9 +1,11 @@
 var babel = require('@babel/core');
 var codePath = require('path').join(__dirname, 'code.js');
-var jsxGenerator = require('../index.js');
+var commonJSX = require('../index.js');
 
 babel.transformFile(codePath, {
-  plugins: [jsxGenerator({ functionName: 'wjsx.create', fragmentName: 'wjsx.fragment' })]
+  plugins: [
+    [commonJSX, { functionName: 'wjsx.create', fragmentName: 'wjsx.fragment' }]
+  ]
 }, function(err, result) {
   if (err) return console.error(err);
   console.log('\n\033[01;34mresult - code: \033[0m\n');

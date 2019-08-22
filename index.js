@@ -101,18 +101,23 @@ const defaultOptions = {
   tagMode: 'normal' // or scope
 }
 
-module.exports = function (options = {}) {
-  return function ({ types: t }) {
-    const build = buildTools(t, Object.assign({}, defaultOptions, options))
-    return {
-      inherits: require('babel-plugin-syntax-jsx'),
-      visitor: {
-        JSXElement (path) {
-          path.replaceWith(build.callExporession(path))
-        },
-        JSXFragment (path) {
-          path.replaceWith(build.callExporession(path))
+module.exports = function ({ types: t }) {
+  let build = null
+  return {
+    inherits: require('babel-plugin-syntax-jsx'),
+    visitor: {
+      Program: {
+        enter (_path, { opts = {} }) {
+          if (!build) {
+            build = buildTools(t, Object.assign({}, defaultOptions, opts))
+          }
         }
+      },
+      JSXElement (path) {
+        path.replaceWith(build.callExporession(path))
+      },
+      JSXFragment (path) {
+        path.replaceWith(build.callExporession(path))
       }
     }
   }
