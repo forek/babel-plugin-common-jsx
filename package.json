@@ -1,10 +1,14 @@
 {
   "name": "babel-plugin-common-jsx",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Build your own jsx-transformer!",
   "main": "index.js",
   "scripts": {
     "example": "node ./example/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/forek/babel-plugin-common-jsx.git"
   },
   "keywords": [
     "babel-plugin",
