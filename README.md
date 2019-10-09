@@ -1,17 +1,17 @@
 
-# @babel/plugin-common-jsx
-`@babel/plugin-common-jsx` 是一个可以将JSX语法代码转译成JS语法的`babel插件`。它将JSX语法结构转译成嵌套调用函数的形式，并且支持开发者指定调用的函数名，同时还具备完整的JSX语法支持。
+# babel-plugin-common-jsx
+`babel-plugin-common-jsx` 是一个可以将JSX语法代码转译成JS语法的`babel插件`。它将JSX语法结构转译成嵌套调用函数的形式，并且支持开发者指定调用的函数名，同时还具备完整的JSX语法支持。
 
 ## 安装
 ```
-npm install --save-dev @babel/plugin-common-jsx
+npm install --save-dev babel-plugin-common-jsx
 ```
 
 ## 使用
 ### .babelrc
 ```javascript
 {
-  "plugins": [["@babel/plugin-common-jsx", options]]
+  "plugins": [["babel-plugin-common-jsx", options]]
 }
 ```
 
@@ -31,7 +31,7 @@ npm install --save-dev @babel/plugin-common-jsx
 {
   "plugins": [
     [
-      "@babel/plugin-common-jsx", {
+      "babel-plugin-common-jsx", {
         "functionName": "createElement",
         "fragmentName": "createFragment",
         "tagMode": "normal"
