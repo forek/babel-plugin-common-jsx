@@ -1,5 +1,9 @@
 const titleCaseRgx = /^[A-Z]/
 
+function throwSyntaxError (type) {
+  throw new Error(`Does not support syntax: ${JSON.stringify(type)}`)
+}
+
 const buildTools = (t, { functionName, fragmentName, tagMode }) => ({
   callExporession (path) {
     const { node } = path
@@ -33,15 +37,12 @@ const buildTools = (t, { functionName, fragmentName, tagMode }) => ({
     }
   },
   memberExpression (node) {
-    if (t.isJSXMemberExpression(node)) {
-      return t.memberExpression(
-        t.isJSXMemberExpression(node.object)
-          ? this.memberExpression(node.object)
-          : this.identifier(node.object),
-        this.identifier(node.property)
-      )
-    }
-    throw new Error(`memberExpression - ${JSON.stringify(node)}`)
+    return t.memberExpression(
+      t.isJSXMemberExpression(node.object)
+        ? this.memberExpression(node.object)
+        : this.identifier(node.object),
+      this.identifier(node.property)
+    )
   },
   jsxProps (attr = []) {
     const hasJSXSpreadAttribute = !!attr.find(node => t.isJSXSpreadAttribute(node))
@@ -64,16 +65,15 @@ const buildTools = (t, { functionName, fragmentName, tagMode }) => ({
       }
       return t.objectProperty(key, value)
     }
-    throw new Error(`objectProperty - ${JSON.stringify(node)}`)
   },
   identifier (node) {
     if (t.isJSXIdentifier(node)) return t.identifier(node.name)
-    throw new Error(`identifier - ${JSON.stringify(node)}`)
+    throwSyntaxError(node.type)
   },
   stringLiteral (node) {
     if (t.isJSXIdentifier(node)) return t.stringLiteral(node.name)
     if (t.isJSXText(node)) return t.stringLiteral(node.value.trim().replace(/\s+/g, ' '))
-    throw new Error(`stringLiteral - ${JSON.stringify(node)}`)
+    throwSyntaxError(node.type)
   },
   jsxChildren (children) {
     const arr = []
@@ -87,8 +87,6 @@ const buildTools = (t, { functionName, fragmentName, tagMode }) => ({
         arr.push(node.expression)
       } else if (t.isJSXElement(node) || t.isJSXFragment(node)) {
         arr.push(node)
-      } else {
-        throw new Error(`jsxChildren - ${JSON.stringify(node)}`)
       }
     }
     return t.arrayExpression(arr)

@@ -6,3 +6,4 @@ const c = <Div c="654" {...props} d="123" {...abc} f=<br />/>
 const d = <this el={<> 123</>}/>
 const e = <> </>
 const f = <this.b el=<> 123    123</> />
+const x = <div a:b={a = b} />
