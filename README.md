@@ -82,3 +82,8 @@ const f = createElement(this.b, {
 
 ## JSX语法支持情况
 除 `JSXNamespacedName` 相关功能外所有语法均已实现支持。
+
+## 运行测试
+```shell
+npm run test
+```
