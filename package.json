@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-common-jsx",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Build your own jsx-transformer!",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,6 @@
     "@babel/core": "^7.5.5",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.2",
-    "babel-plugin-syntax-jsx": "^6.18.0",
     "eslint": "^6.0.1",
     "eslint-config-standard": "^13.0.1",
     "eslint-plugin-import": "^2.18.1",
@@ -32,5 +31,8 @@
     "eslint-plugin-standard": "^4.0.0",
     "jest": "^24.9.0",
     "rimraf": "^3.0.0"
+  },
+  "dependencies": {
+    "babel-plugin-syntax-jsx": "^6.18.0"
   }
 }
