@@ -80,8 +80,9 @@ const buildTools = (t, { functionName, fragmentName, tagMode }) => ({
     for (let i = 0; i < children.length; i++) {
       const node = children[i]
       if (t.isJSXText(node)) {
-        if (!node.value) continue
-        arr.push(this.stringLiteral(node))
+        const str = this.stringLiteral(node)
+        if (!str.value) continue
+        arr.push(str)
         continue
       } else if (t.isJSXExpressionContainer(node)) {
         if (t.isJSXEmptyExpression(node.expression)) continue

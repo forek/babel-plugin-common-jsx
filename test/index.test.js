@@ -114,7 +114,7 @@ describe('Syntax support test:', () => {
     {
       // JSXElement
       const input = 'const el = <div>{<span></span>} {}</div>;'
-      const expected = 'const el = createElement("div", {}, [createElement("span", {}, []), ""]);'
+      const expected = 'const el = createElement("div", {}, [createElement("span", {}, [])]);'
       expect(transform(input)).toBe(expected)
     }
 
