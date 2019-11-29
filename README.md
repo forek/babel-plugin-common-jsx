@@ -72,7 +72,7 @@ JSXAttributes:
 // Before
 const el = <div foo="baz"></div>;
 // After
-const el = createElement("div", {\n  foo: "baz"\n}, []);
+const el = createElement("div", { foo: "baz" }, []);
 ```
 
 JSXSpreadAttribute:
@@ -80,7 +80,7 @@ JSXSpreadAttribute:
 // Before
 const el = <div foo {...props} bar="baz"></div>;
 // After
-const el = createElement("div", Object.assign({}, {\n  foo: true\n}, props, {\n  bar: "baz"\n}), []);
+const el = createElement("div", Object.assign({}, { foo: true }, props, { bar: "baz" }), []);
 ```
 
 JSXChildExpression:
