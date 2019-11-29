@@ -1,13 +1,17 @@
 
 # babel-plugin-common-jsx
-`babel-plugin-common-jsx` 是一个可以将JSX语法代码转译成JS语法的`babel插件`。它将JSX语法结构转译成嵌套调用函数的形式，并且支持开发者指定调用的函数名，同时还具备完整的JSX语法支持。
+`babel-plugin-common-jsx` is a babel plugin that can translate JSX syntax code into JavaScript. It translates the JSX syntax structure into the form of nested calling functions, and supports developers to specify the function name to be called, and also has full JSX syntax support.
 
-## 安装
+This README is also available in other languages:
+
+ * [简体中文](https://github.com/forek/babel-plugin-common-jsx/blob/master/README.zh.md) 
+
+## Install
 ```
 npm install --save-dev babel-plugin-common-jsx
 ```
 
-## 使用
+## Usage
 ### .babelrc
 ```javascript
 {
@@ -15,22 +19,22 @@ npm install --save-dev babel-plugin-common-jsx
 }
 ```
 
-### 设置(options)
-* functionName: 新建 `JSX标签` 时调用的函数名 (默认值: 'createElement')
+### Options
+* functionName: Function name to be called when creating a new JSX tag (default: 'createElement').
 
-* fragmentName: 新建 `JSX片段` 时调用的函数名 (默认值: 'createFragment')
+* fragmentName: Function name to be called when creating a new JSX fragment (default: 'createFragment').
 
-* tagMode: 如何处理标签名是否转换为`变量引用`, 取值: 
+* tagMode: Handle whether tag name is translated to `variable reference`:
 
-  * normal: 标准模式, 大写字母开头的标签名转换为`变量引用`, 其他转换为字符串, 默认情况下使用 `normal` 模式
+  * normal: `normal` mode. Tag names starting with uppercase letters are translated to `variable references`, others are translated to strings, and the normal mode is used by default.
   
-  * scope: 作用域模式, 查找标签所在局部作用域是否存在与标签名一致的变量, 存在时转换为`变量引用`, 否则转换为字符串
+  * scope: `scope` mode. Find whether a variable with the same name as the tag exists in the local scope where the tag is located. If it exists, it is translated to a `variable reference`.
 
-  * static: 静态模式, 需要额外提供一个参数`staticTags`描述那些标签名应该转换成字符串, 而其他标签转换为`变量引用` 
+  * static: `static` mode. Need to provide an additional parameter `staticTags` describing which tag names should be translated to strings, while other tags are translated to `variable references`.
 
-* staticTags: 当`tagMode`值为`static`时需要提供该参数, 该参数是一个由若干字符串组成的数组. 当标签名被包含在该数组内时, 该标签名会转换为字符串
+* staticTags: This parameter is required when the `tagMode` value is` static`. This parameter is an array of several strings. When the tag name is included in the array, the tag name is translated to a string.
 
-设置示例: 
+example: 
 ```javascript
 {
   "plugins": [
@@ -46,54 +50,54 @@ npm install --save-dev babel-plugin-common-jsx
 
 ```
 
-## 示例
+## Example
 JSXElement:
 ```javascript
-// 转换前
+// Before
 const el = <div></div>;
-// 转换后
+// After
 const el = createElement("div", {}, []);
 ```
 
 JSXFragment:
 ```javascript
-// 转换前
+// Before
 const el = <><div></div></>;
-// 转换后
+// After
 const el = createFragment([createElement("div", {}, [])]);
 ```
 
 JSXAttributes:
 ```javascript
-// 转换前
+// Before
 const el = <div foo="baz"></div>;
-// 转换后
+// After
 const el = createElement("div", {\n  foo: "baz"\n}, []);
 ```
 
 JSXSpreadAttribute:
 ```javascript
-// 转换前
+// Before
 const el = <div foo {...props} bar="baz"></div>;
-// 转换后
+// After
 const el = createElement("div", Object.assign({}, {\n  foo: true\n}, props, {\n  bar: "baz"\n}), []);
 ```
 
 JSXChildExpression:
 ```javascript
-// 转换前
+// Before
 const el = <div>{<span></span>} {}</div>;
-// 转换后
+// After
 const el = createElement("div", {}, [createElement("span", {}, [])]);
 ```
 
-## JSX语法参考
-详见: [Draft: JSX Specification](https://facebook.github.io/jsx/) 
+## JSX syntax reference
+Detail: [Draft: JSX Specification](https://facebook.github.io/jsx/)
 
-## JSX语法支持情况
-除 `JSXNamespacedName` 相关功能外所有语法均已实现支持。
+## JSX syntax support
+All syntaxes have been implemented except for `JSXNamespacedName`.
 
-## 运行测试
+## Test
 ```shell
 npm run test
 ```
