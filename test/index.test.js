@@ -154,6 +154,12 @@ describe('Options test:', () => {
     const expected = 'const div = null;\nconst el = createElement(div, {}, []);\nconst el2 = createElement("Div", {}, []);\nconst el3 = createElement(this, {}, []);'
     expect(transform(input, opts)).toBe(expected)
   })
+
+  it('tagMode: static', () => {
+    const opts = { tagMode: 'static', staticTags: ['div', 'Text'] }
+    const input = 'const el = <div></div>;\n const el2 = <Text></Text>;\n const el3 = <span></span>;'
+    const expected = 'const el = createElement("div", {}, []);\nconst el2 = createElement("Text", {}, []);\nconst el3 = createElement(span, {}, []);'
+  })
 })
 
 describe('Not support test:', () => {

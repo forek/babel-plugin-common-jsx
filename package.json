@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-common-jsx",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Build your own jsx-transformer!",
   "main": "index.js",
   "scripts": {

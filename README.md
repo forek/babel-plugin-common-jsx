@@ -26,6 +26,10 @@ npm install --save-dev babel-plugin-common-jsx
   
   * scope: 作用域模式, 查找标签所在局部作用域是否存在与标签名一致的变量, 存在时转换为`变量引用`, 否则转换为字符串
 
+  * static: 静态模式, 需要额外提供一个参数`staticTags`描述那些标签名应该转换成字符串, 而其他标签转换为`变量引用` 
+
+* staticTags: 当`tagMode`值为`static`时需要提供该参数, 该参数是一个由若干字符串组成的数组. 当标签名被包含在该数组内时, 该标签名会转换为字符串
+
 设置示例: 
 ```javascript
 {
@@ -43,38 +47,44 @@ npm install --save-dev babel-plugin-common-jsx
 ```
 
 ## 示例
+JSXElement:
 ```javascript
 // 转换前
-const Div = 123
-const a = <div>123 {123}{} <Div c="654"/></div>
-const b = <div b={(123)}/>
-const c = <Div c="654" {...props} d="123" {...abc} f=<br />/>
-const d = <this el={<> 123</>}/>
-const e = <> </>
-const f = <this.b el=<> 123    123</> />
-
+const el = <div></div>;
 // 转换后
-const Div = 123;
-const a = createElement("div", {}, ["123", 123, "", createElement(Div, {
-  c: "654"
-}, [])]);
-const b = createElement("div", {
-  b: 123
-}, []);
-const c = createElement(Div, Object.assign({}, {
-  c: "654"
-}, props, {
-  d: "123"
-}, abc, {
-  f: createElement("br", {}, [])
-}), []);
-const d = createElement(this, {
-  el: createFragment(["123"])
-}, []);
-const e = createFragment([""]);
-const f = createElement(this.b, {
-  el: createFragment(["123 123"])
-}, []);
+const el = createElement("div", {}, []);
+```
+
+JSXFragment:
+```javascript
+// 转换前
+const el = <><div></div></>;
+// 转换后
+const el = createFragment([createElement("div", {}, [])]);
+```
+
+JSXAttributes:
+```javascript
+// 转换前
+const el = <div foo="baz"></div>;
+// 转换后
+const el = createElement("div", {\n  foo: "baz"\n}, []);
+```
+
+JSXSpreadAttribute:
+```javascript
+// 转换前
+const el = <div foo {...props} bar="baz"></div>;
+// 转换后
+const el = createElement("div", Object.assign({}, {\n  foo: true\n}, props, {\n  bar: "baz"\n}), []);
+```
+
+JSXChildExpression:
+```javascript
+// 转换前
+const el = <div>{<span></span>} {}</div>;
+// 转换后
+const el = createElement("div", {}, [createElement("span", {}, [])]);
 ```
 
 ## JSX语法参考
@@ -86,4 +96,8 @@ const f = createElement(this.b, {
 ## 运行测试
 ```shell
 npm run test
+```
+
+```shell
+npm run test-coverage
 ```

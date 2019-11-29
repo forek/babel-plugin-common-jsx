@@ -4,7 +4,7 @@ function throwSyntaxError (type) {
   throw new Error(`Does not support syntax: ${JSON.stringify(type)}`)
 }
 
-const buildTools = (t, { functionName, fragmentName, tagMode }) => ({
+const buildTools = (t, { functionName, fragmentName, tagMode, staticTags = [] }) => ({
   callExporession (path) {
     const { node } = path
     const children = this.jsxChildren(node.children)
@@ -25,6 +25,7 @@ const buildTools = (t, { functionName, fragmentName, tagMode }) => ({
         switch (tagMode) {
           case 'normal': needIdentifier = titleCaseRgx.test(name.name); break
           case 'scope': needIdentifier = path.scope.hasOwnBinding(name.name, true /* noGlobals */); break
+          case 'static': needIdentifier = Array.isArray(staticTags) && staticTags.includes(name.name); break
         }
       }
 
@@ -98,7 +99,8 @@ const buildTools = (t, { functionName, fragmentName, tagMode }) => ({
 const defaultOptions = {
   functionName: 'createElement',
   fragmentName: 'createFragment',
-  tagMode: 'normal' // or scope
+  tagMode: 'normal',
+  staticTags: []
 }
 
 module.exports = function ({ types: t }) {
