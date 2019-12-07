@@ -25,7 +25,7 @@ const buildTools = (t, { functionName, fragmentName, tagMode, staticTags = [] })
         switch (tagMode) {
           case 'normal': needIdentifier = titleCaseRgx.test(name.name); break
           case 'scope': needIdentifier = path.scope.hasOwnBinding(name.name, true /* noGlobals */); break
-          case 'static': needIdentifier = Array.isArray(staticTags) && staticTags.includes(name.name); break
+          case 'static': needIdentifier = !(Array.isArray(staticTags) && staticTags.includes(name.name)); break
         }
       }
 
